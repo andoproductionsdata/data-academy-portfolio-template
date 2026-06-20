@@ -18,3 +18,7 @@ node_modules
 .claude/
 .remember/
 *.log
+
+# Other package manager lockfiles
+package-lock.json
+yarn.lock
