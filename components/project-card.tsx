@@ -9,7 +9,7 @@ export function ProjectCard({ project }: { project: Project }) {
       href={`/projects/${project.slug}`}
       className="group flex flex-col overflow-hidden rounded-xl border border-border bg-card transition-all duration-300 hover:-translate-y-1 hover:border-primary/50 hover:shadow-lg hover:shadow-primary/5"
     >
-      <div className="relative aspect-[16/10] overflow-hidden border-b border-border bg-secondary">
+      <div className="relative aspect-[1730/909] overflow-hidden border-b border-border bg-secondary">
         <Image
           src={project.preview || "/placeholder.svg"}
           alt={`${project.title} dashboard preview`}
@@ -34,7 +34,7 @@ export function ProjectCard({ project }: { project: Project }) {
           {project.summary}
         </p>
         <ul className="mt-4 flex flex-wrap gap-2">
-          {project.tools.map((tool) => (
+          {(project.tools ?? []).map((tool) => (
             <li
               key={tool}
               className="rounded-md border border-border bg-secondary px-2.5 py-1 font-mono text-xs text-secondary-foreground"
