@@ -6,6 +6,8 @@ import { ArrowLeft, Download, ExternalLink, Building2, Briefcase, Clock, BarChar
 import { GitHubIcon } from "@/components/brand-icons"
 import { Button } from "@/components/ui/button"
 import { FadeIn } from "@/components/motion-wrapper"
+import { SqlCodeBlock } from "@/components/sql-code-block"
+import { DashboardCarousel } from "@/components/dashboard-carousel"
 import { projects, profile } from "@/lib/portfolio-data"
 
 export function generateStaticParams() {
@@ -32,6 +34,7 @@ function NarrativeSection({
   paragraphs,
   bullets,
   accentBullets,
+  accentBulletsLabel,
   delay = 0,
 }: {
   number: string
@@ -39,14 +42,17 @@ function NarrativeSection({
   paragraphs: string[]
   bullets?: string[]
   accentBullets?: string[]
+  accentBulletsLabel?: string
   delay?: number
 }) {
   return (
     <FadeIn delay={delay}>
       <section className="relative pl-5 border-l-2 border-primary/30">
-        <p className="font-mono text-xs text-primary mb-1 tracking-widest uppercase">
-          {number}
-        </p>
+        {number && (
+          <p className="font-mono text-xs text-primary mb-1 tracking-widest uppercase">
+            {number}
+          </p>
+        )}
         <h2 className="text-2xl font-bold text-foreground mb-5">{title}</h2>
         <div className="space-y-4 text-pretty leading-relaxed text-muted-foreground">
           {paragraphs.map((para, i) => (
@@ -56,7 +62,7 @@ function NarrativeSection({
         {bullets && bullets.length > 0 && (
           <ul className="mt-5 space-y-2">
             {bullets.map((item, i) => (
-              <li key={i} className="flex items-start gap-3 text-sm text-muted-foreground">
+              <li key={i} className="flex items-start gap-3 text-muted-foreground">
                 <span className="mt-1.5 size-1.5 shrink-0 rounded-full bg-primary/60" aria-hidden="true" />
                 {item}
               </li>
@@ -64,17 +70,22 @@ function NarrativeSection({
           </ul>
         )}
         {accentBullets && accentBullets.length > 0 && (
-          <ul className="mt-5 space-y-2">
+          <>
+            {accentBulletsLabel && (
+              <p className="mt-6 mb-3 text-2xl font-bold text-foreground">{accentBulletsLabel}</p>
+            )}
+          <ul className="mt-2 space-y-2">
             {accentBullets.map((item, i) => (
               <li
                 key={i}
-                className="flex items-start gap-3 rounded-lg border border-primary/20 bg-primary/5 px-4 py-2.5 text-sm text-foreground"
+                className="flex items-start gap-3 rounded-lg border border-primary/20 bg-primary/5 px-4 py-2.5 text-foreground"
               >
                 <BarChart3 className="mt-0.5 size-4 shrink-0 text-primary" aria-hidden="true" />
                 {item}
               </li>
             ))}
           </ul>
+          </>
         )}
       </section>
     </FadeIn>
@@ -93,8 +104,6 @@ export default async function ProjectPage({
   const metaItems = [
     project.company && { icon: Building2, label: project.company },
     project.industry && { icon: Briefcase, label: project.industry },
-    project.role && { icon: Briefcase, label: project.role },
-    project.duration && { icon: Clock, label: project.duration },
   ].filter(Boolean) as { icon: typeof Building2; label: string }[]
 
   const [firstImage, ...remainingImages] = project.gallery
@@ -112,70 +121,137 @@ export default async function ProjectPage({
           Back to portfolio
         </Link>
 
-        {/* Project header */}
-        <FadeIn delay={0.05}>
-          <header className="mt-8 rounded-2xl border border-border bg-card/60 p-6 sm:p-8">
-            <h1 className="text-balance text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-              {project.title}
-            </h1>
 
-            {metaItems.length > 0 && (
-              <ul className="mt-4 flex flex-wrap gap-x-5 gap-y-2">
-                {metaItems.map(({ icon: Icon, label }) => (
-                  <li key={label} className="inline-flex items-center gap-1.5 text-sm text-muted-foreground">
-                    <Icon className="size-3.5 shrink-0" aria-hidden="true" />
-                    {label}
-                  </li>
-                ))}
-              </ul>
-            )}
-
-            <p className="mt-4 max-w-2xl text-pretty text-base leading-relaxed text-muted-foreground">
-              {project.summary}
-            </p>
-
-            <div className="mt-5">
-              <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground mb-2">
-                Tools used
-              </p>
-              <ul className="flex flex-wrap gap-2">
-                {project.tools.map((tool) => (
-                  <li
-                    key={tool}
-                    className="rounded-md border border-border bg-secondary px-3 py-1 font-mono text-xs text-secondary-foreground"
-                  >
-                    {tool}
-                  </li>
-                ))}
-              </ul>
+        {/* Cover image */}
+        {project.preview && project.preview !== "/placeholder.svg" && (
+          <FadeIn delay={0.1}>
+            <div className="mt-8 overflow-hidden rounded-2xl border border-border">
+              <Image
+                src={project.preview}
+                alt={`${project.title} cover`}
+                width={1730}
+                height={909}
+                className="w-full object-cover"
+                priority
+              />
             </div>
-          </header>
-        </FadeIn>
+          </FadeIn>
+        )}
 
         {/* Narrative sections */}
         <div className="mt-14 space-y-14">
           <NarrativeSection
-            number="01 — Background"
-            title="The Challenge"
+            number=""
+            title="Project Summary & Challenge"
             paragraphs={project.challenge}
             delay={0.1}
           />
 
           <NarrativeSection
-            number="02 — Solution"
-            title="What I Built"
-            paragraphs={project.whatIBuilt}
+            number=""
+            title="Requirements"
+            paragraphs={project.requirements ?? []}
             bullets={project.keyDeliverables}
+            accentBullets={project.kpiTargets}
+            accentBulletsLabel="Key Performance Targets"
             delay={0.15}
           />
 
-          <NarrativeSection
-            number="03 — Results"
-            title="The Outcome"
-            paragraphs={project.outcome}
-            accentBullets={project.impact}
-            delay={0.2}
-          />
+          <FadeIn delay={0.2}>
+            <section className="relative pl-5 border-l-2 border-primary/30">
+              <h2 className="text-2xl font-bold text-foreground mb-5">Build</h2>
+              <div className="mb-6 flex items-start gap-4 rounded-xl border border-border bg-card px-5 py-4">
+                <GitHubIcon className="mt-0.5 size-5 shrink-0 text-foreground" aria-hidden="true" />
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm text-muted-foreground">
+                    All project files, including SQL scripts, data sources, and the Power BI report, are available in the GitHub repository.
+                  </p>
+                </div>
+                <a
+                  href={project.githubUrl ?? "#"}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex shrink-0 items-center gap-1.5 rounded-md bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground transition-opacity hover:opacity-90"
+                >
+                  <GitHubIcon className="size-3.5" aria-hidden="true" />
+                  View Repository
+                </a>
+              </div>
+              <div className="space-y-4 text-pretty leading-relaxed text-muted-foreground">
+                <p>{project.whatIBuilt[0]}</p>
+              </div>
+              {project.buildImage && (
+                <div className="mt-6 overflow-hidden rounded-xl border border-border">
+                  <Image
+                    src={project.buildImage}
+                    alt="Build diagram"
+                    width={1200}
+                    height={675}
+                    className="w-full object-cover"
+                  />
+                </div>
+              )}
+              <div className="mt-4 space-y-4 text-pretty leading-relaxed text-muted-foreground">
+                <p>{project.whatIBuilt[1]}</p>
+              </div>
+              {project.sqlSnippet !== undefined && (
+                <div className="mt-6">
+                  <h3 className="text-lg font-semibold text-foreground mb-3">SQL Script</h3>
+                  {project.sqlDescription && (
+                    <p className="mb-4 text-pretty leading-relaxed text-muted-foreground">{project.sqlDescription}</p>
+                  )}
+                  {project.sqlSnippet && <SqlCodeBlock code={project.sqlSnippet} />}
+                </div>
+              )}
+              {(project.dashboardTitle || project.dashboardDescription) && (
+                <div className="mt-6">
+                  {project.dashboardTitle && (
+                    <h3 className="text-lg font-semibold text-foreground">{project.dashboardTitle}</h3>
+                  )}
+                  {project.dashboardDescription && (
+                    <p className="mt-1 text-pretty leading-relaxed text-muted-foreground">{project.dashboardDescription}</p>
+                  )}
+                </div>
+              )}
+              {project.dashboardSlides && project.dashboardSlides.length > 0 && (
+                <DashboardCarousel
+                  slides={project.dashboardSlides}
+                />
+              )}
+            </section>
+          </FadeIn>
+
+          <FadeIn delay={0.25}>
+            <section className="relative pl-5 border-l-2 border-primary/30">
+              <h2 className="text-2xl font-bold text-foreground mb-5">Project Outcome</h2>
+              {project.outcome.length > 0 && (
+                <div className="space-y-4 text-pretty leading-relaxed text-muted-foreground">
+                  {project.outcome.map((para, i) => <p key={i}>{para}</p>)}
+                </div>
+              )}
+              {project.impact && project.impact.length > 0 && (
+                <ul className="mt-5 space-y-2">
+                  {project.impact.map((item, i) => (
+                    <li key={i} className="flex items-start gap-3 rounded-lg border border-primary/20 bg-primary/5 px-4 py-2.5 text-sm text-foreground">
+                      <BarChart3 className="mt-0.5 size-4 shrink-0 text-primary" aria-hidden="true" />
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              )}
+              {project.outcomeImage && (
+                <div className="mt-6 overflow-hidden rounded-xl border border-border">
+                  <Image
+                    src={project.outcomeImage}
+                    alt="Project outcome"
+                    width={1200}
+                    height={675}
+                    className="w-full h-auto object-contain"
+                  />
+                </div>
+              )}
+            </section>
+          </FadeIn>
         </div>
 
         {/* Gallery */}
