@@ -11,8 +11,8 @@ import { cn } from "@/lib/utils"
 const navItems = [
   { label: "Home", href: "/#home" },
   { label: "About", href: "/#about" },
-  { label: "Skills", href: "/#skills" },
   { label: "Projects", href: "/#projects" },
+  { label: "Skills", href: "/#skills" },
   { label: "Certifications", href: "/#certifications" },
   { label: "Contact", href: "/#contact" },
 ]
@@ -47,7 +47,7 @@ export function SiteHeader() {
           <span className="flex size-8 items-center justify-center rounded-md bg-primary text-primary-foreground">
             <BarChart3 className="size-4" aria-hidden="true" />
           </span>
-          Ando Productions
+          {profile.name}
         </Link>
 
         <nav className="hidden items-center gap-1 md:flex" aria-label="Primary">
