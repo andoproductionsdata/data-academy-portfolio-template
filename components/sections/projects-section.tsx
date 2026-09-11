@@ -9,7 +9,6 @@ export function ProjectsSection() {
       <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
         <FadeIn>
           <SectionHeading
-            eyebrow="04 — Projects"
             title="Featured Projects"
             description="Selected analytics and reporting projects. Click a card to read the full case study, see the dashboards, and learn about the business impact."
           />

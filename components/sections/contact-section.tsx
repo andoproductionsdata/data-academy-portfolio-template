@@ -16,7 +16,6 @@ export function ContactSection() {
     <section id="contact" className="scroll-mt-16 bg-card/40">
       <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
         <SectionHeading
-          eyebrow="05 — Contact"
           title="Let's work together"
           description="Looking for a data analyst who turns numbers into decisions? Reach out through any of the channels below."
         />

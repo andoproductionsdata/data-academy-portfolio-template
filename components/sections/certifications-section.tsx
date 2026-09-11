@@ -10,7 +10,6 @@ export function CertificationsSection() {
     >
       <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
         <SectionHeading
-          eyebrow="03 — Certifications"
           title="Certifications"
           description="Credentials from leading providers. Replace these placeholders with your verified certifications."
         />
