@@ -157,6 +157,16 @@ export default async function ProjectPage({
             delay={0.15}
           />
 
+          {(project.customSections ?? []).map((section, i) => (
+            <NarrativeSection
+              key={i}
+              number=""
+              title={section.title}
+              paragraphs={section.content ? [section.content] : []}
+              delay={0.15 + (i + 1) * 0.05}
+            />
+          ))}
+
           <FadeIn delay={0.2}>
             <section className="relative pl-5 border-l-2 border-primary/30">
               <h2 className="text-2xl font-bold text-foreground mb-5">Build</h2>

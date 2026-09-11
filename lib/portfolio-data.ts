@@ -27,6 +27,7 @@ export type Project = {
   preview: string
   challenge: string[]
   requirements: string[]
+  customSections?: { title: string; content: string }[]
   whatIBuilt: string[]
   sqlSnippet?: string
   sqlDescription?: string
