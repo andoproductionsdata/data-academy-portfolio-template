@@ -33,7 +33,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  const theme = (portfolioConfig as { theme?: string }).theme ?? 'purple'
+  const theme = (portfolioConfig as unknown as { theme?: string }).theme ?? 'purple'
   return (
     <html
       lang="en"
