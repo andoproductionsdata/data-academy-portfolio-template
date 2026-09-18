@@ -4,6 +4,7 @@ import { Inter, JetBrains_Mono } from 'next/font/google'
 import './globals.css'
 import { SiteHeader } from '@/components/site-header'
 import { SiteFooter } from '@/components/site-footer'
+import portfolioConfig from '@/lib/portfolio-config.json'
 
 const inter = Inter({ variable: '--font-inter', subsets: ['latin'] })
 const jetbrainsMono = JetBrains_Mono({
@@ -32,10 +33,11 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const theme = (portfolioConfig as { theme?: string }).theme ?? 'purple'
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${jetbrainsMono.variable} scroll-smooth bg-background`}
+      className={`${inter.variable} ${jetbrainsMono.variable} scroll-smooth bg-background theme-${theme}`}
     >
       <body className="font-sans antialiased">
         <SiteHeader />
