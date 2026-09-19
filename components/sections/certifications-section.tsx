@@ -36,7 +36,7 @@ export function CertificationsSection() {
                 href={cert.credentialUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="mt-4 inline-flex items-center gap-1.5 text-sm text-primary transition-opacity hover:opacity-80"
+                className="mt-4 inline-flex items-center gap-1.5 text-sm text-white transition-opacity hover:opacity-80"
               >
                 View credential
                 <ExternalLink className="size-3.5" aria-hidden="true" />

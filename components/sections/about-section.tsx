@@ -34,7 +34,7 @@ export function AboutSection() {
                 )}
                 <div>
                   <dt className="text-muted-foreground">Status</dt>
-                  <dd className={profile.openToWork ? "text-primary" : "text-muted-foreground"}>
+                  <dd className={profile.openToWork ? "text-white" : "text-muted-foreground"}>
                     {statusLabel}
                   </dd>
                 </div>
