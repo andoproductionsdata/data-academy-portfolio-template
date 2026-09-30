@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button"
 import { FadeIn } from "@/components/motion-wrapper"
 import { SqlCodeBlock } from "@/components/sql-code-block"
 import { DashboardCarousel } from "@/components/dashboard-carousel"
-import { projects, profile } from "@/lib/portfolio-data"
+import { projects, profile, type CodeSection, type Dashboard, type CustomContentItem } from "@/lib/portfolio-data"
 
 export function generateStaticParams() {
   return projects.map((p) => ({ slug: p.slug }))
@@ -101,6 +101,8 @@ export default async function ProjectPage({
   const project = projects.find((p) => p.slug === slug)
   if (!project) notFound()
 
+  const isCustomMode = project.projectMode === "custom"
+
   const metaItems = [
     project.company && { icon: Building2, label: project.company },
     project.industry && { icon: Briefcase, label: project.industry },
@@ -140,128 +142,253 @@ export default async function ProjectPage({
 
         {/* Narrative sections */}
         <div className="mt-14 space-y-14">
+
+          {/* Summary — always shown */}
           <NarrativeSection
             number=""
-            title="Project Summary & Challenge"
+            title="Project Summary"
             paragraphs={project.challenge}
             delay={0.1}
           />
 
-          <NarrativeSection
-            number=""
-            title="Requirements"
-            paragraphs={project.requirements ?? []}
-            bullets={project.keyDeliverables}
-            accentBullets={project.kpiTargets}
-            accentBulletsLabel="Key Performance Targets"
-            delay={0.15}
-          />
+          {/* ── TEMPLATE MODE ─────────────────────────────────────────── */}
+          {!isCustomMode && (
+            <>
+              <FadeIn delay={0.2}>
+                <section className="relative pl-5 border-l-2 border-primary/30">
+                  <h2 className="text-2xl font-bold text-foreground mb-5">Build</h2>
+                  <div className="mb-6 flex items-start gap-4 rounded-xl border border-border bg-card px-5 py-4">
+                    <GitHubIcon className="mt-0.5 size-5 shrink-0 text-foreground" aria-hidden="true" />
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm text-muted-foreground">
+                        All project files, including scripts, data sources, and reports, are available in the GitHub repository.
+                      </p>
+                    </div>
+                    <a
+                      href={project.githubUrl ?? "#"}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex shrink-0 items-center gap-1.5 rounded-md bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground transition-opacity hover:opacity-90"
+                    >
+                      <GitHubIcon className="size-3.5" aria-hidden="true" />
+                      View Repository
+                    </a>
+                  </div>
 
-          {(project.customSections ?? []).map((section, i) => (
-            <NarrativeSection
-              key={i}
-              number=""
-              title={section.title}
-              paragraphs={section.content ? [section.content] : []}
-              delay={0.15 + (i + 1) * 0.05}
-            />
-          ))}
+                  {project.whatIBuilt.length > 0 && (
+                    <div className="space-y-4 text-pretty leading-relaxed text-muted-foreground">
+                      {project.whatIBuilt.map((para, i) => <p key={i}>{para}</p>)}
+                    </div>
+                  )}
+                  {project.whatIBuiltBullets && project.whatIBuiltBullets.length > 0 && (
+                    <ul className="mt-3 space-y-2">
+                      {project.whatIBuiltBullets.map((item, i) => (
+                        <li key={i} className="flex items-start gap-3 text-muted-foreground">
+                          <span className="mt-1.5 size-1.5 shrink-0 rounded-full bg-primary/60" aria-hidden="true" />
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                  {project.buildImage && (
+                    <div className="mt-6 overflow-hidden rounded-xl border border-border">
+                      <Image
+                        src={project.buildImage}
+                        alt="Build diagram"
+                        width={1200}
+                        height={675}
+                        className="w-full object-cover"
+                      />
+                    </div>
+                  )}
 
-          <FadeIn delay={0.2}>
-            <section className="relative pl-5 border-l-2 border-primary/30">
-              <h2 className="text-2xl font-bold text-foreground mb-5">Build</h2>
-              <div className="mb-6 flex items-start gap-4 rounded-xl border border-border bg-card px-5 py-4">
-                <GitHubIcon className="mt-0.5 size-5 shrink-0 text-foreground" aria-hidden="true" />
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm text-muted-foreground">
-                    All project files, including SQL scripts, data sources, and the Power BI report, are available in the GitHub repository.
-                  </p>
-                </div>
-                <a
-                  href={project.githubUrl ?? "#"}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="inline-flex shrink-0 items-center gap-1.5 rounded-md bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground transition-opacity hover:opacity-90"
-                >
-                  <GitHubIcon className="size-3.5" aria-hidden="true" />
-                  View Repository
-                </a>
-              </div>
-              <div className="space-y-4 text-pretty leading-relaxed text-muted-foreground">
-                <p>{project.whatIBuilt[0]}</p>
-              </div>
-              {project.buildImage && (
-                <div className="mt-6 overflow-hidden rounded-xl border border-border">
-                  <Image
-                    src={project.buildImage}
-                    alt="Build diagram"
-                    width={1200}
-                    height={675}
-                    className="w-full object-cover"
-                  />
-                </div>
-              )}
-              <div className="mt-4 space-y-4 text-pretty leading-relaxed text-muted-foreground">
-                <p>{project.whatIBuilt[1]}</p>
-              </div>
-              {project.sqlSnippet !== undefined && (
-                <div className="mt-6">
-                  <h3 className="text-lg font-semibold text-foreground mb-3">SQL Script</h3>
-                  {project.sqlDescription && (
-                    <p className="mb-4 text-pretty leading-relaxed text-muted-foreground">{project.sqlDescription}</p>
-                  )}
-                  {project.sqlSnippet && <SqlCodeBlock code={project.sqlSnippet} />}
-                </div>
-              )}
-              {(project.dashboardTitle || project.dashboardDescription) && (
-                <div className="mt-6">
-                  {project.dashboardTitle && (
-                    <h3 className="text-lg font-semibold text-foreground">{project.dashboardTitle}</h3>
-                  )}
-                  {project.dashboardDescription && (
-                    <p className="mt-1 text-pretty leading-relaxed text-muted-foreground">{project.dashboardDescription}</p>
-                  )}
-                </div>
-              )}
-              {project.dashboardSlides && project.dashboardSlides.length > 0 && (
-                <DashboardCarousel
-                  slides={project.dashboardSlides}
-                />
-              )}
-            </section>
-          </FadeIn>
-
-          <FadeIn delay={0.25}>
-            <section className="relative pl-5 border-l-2 border-primary/30">
-              <h2 className="text-2xl font-bold text-foreground mb-5">Project Outcome</h2>
-              {project.outcome.length > 0 && (
-                <div className="space-y-4 text-pretty leading-relaxed text-muted-foreground">
-                  {project.outcome.map((para, i) => <p key={i}>{para}</p>)}
-                </div>
-              )}
-              {project.impact && project.impact.length > 0 && (
-                <ul className="mt-5 space-y-2">
-                  {project.impact.map((item, i) => (
-                    <li key={i} className="flex items-start gap-3 rounded-lg border border-primary/20 bg-primary/5 px-4 py-2.5 text-sm text-foreground">
-                      <BarChart3 className="mt-0.5 size-4 shrink-0 text-primary" aria-hidden="true" />
-                      {item}
-                    </li>
+                  {/* Code sections */}
+                  {(project.codeSections ?? []).map((section: CodeSection, i: number) => (
+                    <div key={i} className="mt-8">
+                      {section.title && (
+                        <h3 className="text-lg font-semibold text-foreground mb-3">{section.title}</h3>
+                      )}
+                      {section.description && (
+                        <p className="mb-4 text-pretty leading-relaxed text-muted-foreground">{section.description}</p>
+                      )}
+                      {section.snippet && <SqlCodeBlock code={section.snippet} />}
+                      {section.image && (
+                        <div className="mt-4 overflow-hidden rounded-xl border border-border">
+                          <Image
+                            src={section.image}
+                            alt={section.title || "Code section image"}
+                            width={1200}
+                            height={675}
+                            className="w-full h-auto object-contain"
+                          />
+                        </div>
+                      )}
+                    </div>
                   ))}
-                </ul>
-              )}
-              {project.outcomeImage && (
-                <div className="mt-6 overflow-hidden rounded-xl border border-border">
-                  <Image
-                    src={project.outcomeImage}
-                    alt="Project outcome"
-                    width={1200}
-                    height={675}
-                    className="w-full h-auto object-contain"
-                  />
-                </div>
-              )}
-            </section>
-          </FadeIn>
+
+                  {/* Backwards compat: old single sqlSnippet field */}
+                  {!project.codeSections?.length && project.sqlSnippet !== undefined && (
+                    <div className="mt-8">
+                      <h3 className="text-lg font-semibold text-foreground mb-3">SQL Script</h3>
+                      {project.sqlDescription && (
+                        <p className="mb-4 text-pretty leading-relaxed text-muted-foreground">{project.sqlDescription}</p>
+                      )}
+                      {project.sqlSnippet && <SqlCodeBlock code={project.sqlSnippet} />}
+                    </div>
+                  )}
+
+                  {/* Custom sections (template mode) */}
+                  {(project.customSections ?? []).map((section, i: number) => (
+                    <div key={i} className="mt-8">
+                      {section.title && (
+                        <h3 className="text-lg font-semibold text-foreground mb-3">{section.title}</h3>
+                      )}
+                      {section.content && (
+                        <p className="text-pretty leading-relaxed text-muted-foreground">{section.content}</p>
+                      )}
+                      {section.image && (
+                        <div className="mt-4 overflow-hidden rounded-xl border border-border">
+                          <Image
+                            src={section.image}
+                            alt={section.title || "Section image"}
+                            width={1200}
+                            height={675}
+                            className="w-full h-auto object-contain"
+                          />
+                        </div>
+                      )}
+                    </div>
+                  ))}
+
+                  {/* Dashboard sections */}
+                  {(project.dashboards ?? []).filter((d: Dashboard) => d.slides?.length > 0).map((dashboard: Dashboard, i: number) => (
+                    <DashboardCarousel
+                      key={i}
+                      title={dashboard.title}
+                      description={dashboard.description}
+                      slides={dashboard.slides}
+                    />
+                  ))}
+
+                  {/* Backwards compat: old single dashboardTitle/dashboardSlides fields */}
+                  {!project.dashboards?.length && project.dashboardSlides && project.dashboardSlides.length > 0 && (
+                    <DashboardCarousel
+                      title={project.dashboardTitle}
+                      description={project.dashboardDescription}
+                      slides={project.dashboardSlides}
+                    />
+                  )}
+                </section>
+              </FadeIn>
+
+              <FadeIn delay={0.25}>
+                <section className="relative pl-5 border-l-2 border-primary/30">
+                  <h2 className="text-2xl font-bold text-foreground mb-5">Project Outcome</h2>
+                  {project.outcome.length > 0 && (
+                    <div className="space-y-4 text-pretty leading-relaxed text-muted-foreground">
+                      {project.outcome.map((para, i) => <p key={i}>{para}</p>)}
+                    </div>
+                  )}
+                  {project.impact && project.impact.length > 0 && (
+                    <ul className="mt-5 space-y-2">
+                      {project.impact.map((item, i) => (
+                        <li key={i} className="flex items-start gap-3 rounded-lg border border-primary/20 bg-primary/5 px-4 py-2.5 text-sm text-foreground">
+                          <BarChart3 className="mt-0.5 size-4 shrink-0 text-primary" aria-hidden="true" />
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                  {project.outcomeImage && (
+                    <div className="mt-6 overflow-hidden rounded-xl border border-border">
+                      <Image
+                        src={project.outcomeImage}
+                        alt="Project outcome"
+                        width={1200}
+                        height={675}
+                        className="w-full h-auto object-contain"
+                      />
+                    </div>
+                  )}
+                </section>
+              </FadeIn>
+            </>
+          )}
+
+          {/* ── CUSTOM MODE ───────────────────────────────────────────── */}
+          {isCustomMode && (project.customContent ?? []).map((item: CustomContentItem, i: number) => {
+            const delay = 0.15 + i * 0.05
+
+            if (item.type === "text") {
+              return (
+                <FadeIn key={i} delay={delay}>
+                  <section className="relative pl-5 border-l-2 border-primary/30">
+                    {item.title && (
+                      <h2 className="text-2xl font-bold text-foreground mb-5">{item.title}</h2>
+                    )}
+                    {item.content && (
+                      <p className="text-pretty leading-relaxed text-muted-foreground">{item.content}</p>
+                    )}
+                    {item.image && (
+                      <div className="mt-6 overflow-hidden rounded-xl border border-border">
+                        <Image
+                          src={item.image}
+                          alt={item.title || "Section image"}
+                          width={1200}
+                          height={675}
+                          className="w-full h-auto object-contain"
+                        />
+                      </div>
+                    )}
+                  </section>
+                </FadeIn>
+              )
+            }
+
+            if (item.type === "code") {
+              return (
+                <FadeIn key={i} delay={delay}>
+                  <section className="relative pl-5 border-l-2 border-primary/30">
+                    {item.title && (
+                      <h2 className="text-2xl font-bold text-foreground mb-5">{item.title}</h2>
+                    )}
+                    {item.description && (
+                      <p className="mb-4 text-pretty leading-relaxed text-muted-foreground">{item.description}</p>
+                    )}
+                    {item.snippet && <SqlCodeBlock code={item.snippet} />}
+                    {item.image && (
+                      <div className="mt-6 overflow-hidden rounded-xl border border-border">
+                        <Image
+                          src={item.image}
+                          alt={item.title || "Code section image"}
+                          width={1200}
+                          height={675}
+                          className="w-full h-auto object-contain"
+                        />
+                      </div>
+                    )}
+                  </section>
+                </FadeIn>
+              )
+            }
+
+            if (item.type === "dashboard") {
+              return (
+                <FadeIn key={i} delay={delay}>
+                  <section className="relative pl-5 border-l-2 border-primary/30">
+                    <DashboardCarousel
+                      title={item.title}
+                      description={item.description}
+                      slides={item.slides ?? []}
+                    />
+                  </section>
+                </FadeIn>
+              )
+            }
+
+            return null
+          })}
+
         </div>
 
         {/* Gallery */}

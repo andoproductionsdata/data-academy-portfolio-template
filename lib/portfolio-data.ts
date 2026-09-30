@@ -15,8 +15,34 @@ export type WorkExperience = {
   responsibilities: string[]
 }
 
+export type CodeSection = {
+  title: string
+  description: string
+  snippet: string
+  image?: string
+}
+
+export type DashboardSlide = {
+  title: string
+  description: string | string[]
+  bullets?: string[]
+  image: string
+}
+
+export type Dashboard = {
+  title: string
+  description: string
+  slides: DashboardSlide[]
+}
+
+export type CustomContentItem =
+  | { type: "text"; title: string; content: string; image?: string }
+  | { type: "code"; title: string; description: string; snippet: string; image?: string }
+  | { type: "dashboard"; title: string; description: string; slides: DashboardSlide[] }
+
 export type Project = {
   slug: string
+  projectMode?: "template" | "custom"
   title: string
   company?: string
   industry?: string
@@ -26,16 +52,20 @@ export type Project = {
   tools: string[]
   preview: string
   challenge: string[]
-  requirements: string[]
-  customSections?: { title: string; content: string }[]
+  requirements?: string[]
+  customSections?: { title: string; content: string; image?: string }[]
   whatIBuilt: string[]
+  whatIBuiltBullets?: string[]
   sqlSnippet?: string
   sqlDescription?: string
   buildImage?: string
   outcomeImage?: string
   dashboardTitle?: string
   dashboardDescription?: string
-  dashboardSlides?: { title: string; description: string | string[]; bullets?: string[]; image: string }[]
+  dashboardSlides?: DashboardSlide[]
+  codeSections?: CodeSection[]
+  dashboards?: Dashboard[]
+  customContent?: CustomContentItem[]
   outcome: string[]
   keyDeliverables?: string[]
   kpiTargets?: string[]
