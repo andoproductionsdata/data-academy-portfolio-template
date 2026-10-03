@@ -467,7 +467,12 @@ export default async function ProjectPage({
 
         {/* Footer actions */}
         <FadeIn delay={0.1}>
-          <div className="mt-14 flex flex-wrap items-center gap-3 border-t border-border pt-8">
+          {project.githubUrl && (
+            <p className="mt-14 text-sm text-muted-foreground">
+              All project files, including scripts, data sources, dashboards, analysis files, and supporting documentation, are available in the GitHub repository.
+            </p>
+          )}
+          <div className={`${project.githubUrl ? "mt-4" : "mt-14"} flex flex-wrap items-center gap-3 border-t border-border pt-8`}>
             <Button
               nativeButton={false}
               render={
