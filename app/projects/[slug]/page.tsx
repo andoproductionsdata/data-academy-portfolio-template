@@ -468,9 +468,23 @@ export default async function ProjectPage({
         {/* Footer actions */}
         <FadeIn delay={0.1}>
           {project.githubUrl && (
-            <p className="mt-14 text-sm text-muted-foreground">
-              All project files, including scripts, data sources, dashboards, analysis files, and supporting documentation, are available in the GitHub repository.
-            </p>
+            <div className="mt-14 flex items-start gap-4 rounded-xl border border-border bg-card px-5 py-4">
+              <GitHubIcon className="mt-0.5 size-5 shrink-0 text-foreground" aria-hidden="true" />
+              <div className="flex-1 min-w-0">
+                <p className="text-sm text-muted-foreground">
+                  All project files, including scripts, data sources, dashboards, analysis files, and supporting documentation, are available in the GitHub repository.
+                </p>
+              </div>
+              <a
+                href={project.githubUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex shrink-0 items-center gap-1.5 rounded-md bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground transition-opacity hover:opacity-90"
+              >
+                <GitHubIcon className="size-3.5" aria-hidden="true" />
+                View Repository
+              </a>
+            </div>
           )}
           <div className={`${project.githubUrl ? "mt-4" : "mt-14"} flex flex-wrap items-center gap-3 border-t border-border pt-8`}>
             <Button
@@ -482,18 +496,6 @@ export default async function ProjectPage({
                 </Link>
               }
             />
-            {project.githubUrl && (
-              <Button
-                variant="outline"
-                nativeButton={false}
-                render={
-                  <a href={project.githubUrl} target="_blank" rel="noreferrer">
-                    <GitHubIcon className="size-4" aria-hidden="true" />
-                    All project files, including scripts, data sources, dashboards, analysis files, and supporting documentation, are available in the GitHub repository.
-                  </a>
-                }
-              />
-            )}
             {project.liveUrl && (
               <Button
                 variant="outline"
