@@ -489,7 +489,7 @@ export default async function ProjectPage({
                 render={
                   <a href={project.githubUrl} target="_blank" rel="noreferrer">
                     <GitHubIcon className="size-4" aria-hidden="true" />
-                    View on GitHub
+                    All project files, including scripts, data sources, dashboards, analysis files, and supporting documentation, are available in the GitHub repository.
                   </a>
                 }
               />
