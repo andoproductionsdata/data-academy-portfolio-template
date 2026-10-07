@@ -12,9 +12,9 @@ export default function Page() {
       <HeroSection />
       <AboutSection />
       <ProjectsSection />
-      <WorkExperienceSection />
       <SkillsSection />
       <CertificationsSection />
+      <WorkExperienceSection />
       <ContactSection />
     </main>
   )
