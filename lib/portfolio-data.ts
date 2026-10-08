@@ -4,6 +4,14 @@ export const profile = config.profile
 export const about = (config as any).about ?? { bio: "", focus: "", coreStack: "" }
 export const technicalSkills = config.technicalSkills
 export const certifications = config.certifications
+export const education: Education[] = (config as any).education ?? []
+
+export type Education = {
+  qualification: string
+  institution: string
+  status: "In Progress" | "Completed"
+  year?: string
+}
 export const workExperience: WorkExperience[] = (config as any).workExperience ?? []
 
 export type WorkExperience = {
