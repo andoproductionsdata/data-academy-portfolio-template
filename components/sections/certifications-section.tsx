@@ -53,9 +53,11 @@ export function CertificationsSection() {
                   <span className="flex size-10 items-center justify-center rounded-lg bg-secondary text-primary">
                     <Award className="size-5" aria-hidden="true" />
                   </span>
-                  <span className="font-mono text-xs text-muted-foreground">
-                    {cert.date}
-                  </span>
+                  {cert.date && (
+                    <span className="font-mono text-xs text-muted-foreground">
+                      {cert.date}
+                    </span>
+                  )}
                 </div>
                 <h3 className="mt-4 font-semibold text-foreground">{cert.name}</h3>
                 <p className="mt-1 text-sm text-muted-foreground">
