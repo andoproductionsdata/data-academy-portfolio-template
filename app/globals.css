@@ -119,16 +119,16 @@
 
 /* ── Colour Themes ───────────────────────────────────────────────── */
 .theme-dark-blue {
-  --primary: oklch(0.30 0.24 240);
-  --accent: oklch(0.30 0.24 240);
-  --ring: oklch(0.30 0.24 240);
-  --chart-1: oklch(0.30 0.24 240);
-  --chart-2: oklch(0.37 0.20 255);
-  --chart-3: oklch(0.44 0.17 220);
-  --chart-4: oklch(0.25 0.21 245);
-  --chart-5: oklch(0.50 0.14 265);
-  --sidebar-primary: oklch(0.30 0.24 240);
-  --sidebar-ring: oklch(0.30 0.24 240);
+  --primary: oklch(0.55 0.22 240);
+  --accent: oklch(0.55 0.22 240);
+  --ring: oklch(0.55 0.22 240);
+  --chart-1: oklch(0.55 0.22 240);
+  --chart-2: oklch(0.61 0.18 255);
+  --chart-3: oklch(0.67 0.15 220);
+  --chart-4: oklch(0.49 0.20 245);
+  --chart-5: oklch(0.72 0.12 265);
+  --sidebar-primary: oklch(0.55 0.22 240);
+  --sidebar-ring: oklch(0.55 0.22 240);
 }
 
 .theme-green {
