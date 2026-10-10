@@ -9,6 +9,7 @@ import { FadeIn } from "@/components/motion-wrapper"
 import { SqlCodeBlock } from "@/components/sql-code-block"
 import { DashboardCarousel } from "@/components/dashboard-carousel"
 import { projects, profile, type CodeSection, type Dashboard, type CustomContentItem } from "@/lib/portfolio-data"
+import { RichText } from "@/components/rich-text"
 
 export function generateStaticParams() {
   return projects.map((p) => ({ slug: p.slug }))
@@ -209,7 +210,7 @@ export default async function ProjectPage({
                         <h3 className="text-lg font-semibold text-foreground mb-3">{section.title}</h3>
                       )}
                       {section.description && (
-                        <p className="mb-4 text-pretty leading-relaxed text-muted-foreground">{section.description}</p>
+                        <RichText text={section.description} className="mb-4" />
                       )}
                       {section.snippet && <SqlCodeBlock code={section.snippet} />}
                       {section.image && (
@@ -244,7 +245,7 @@ export default async function ProjectPage({
                         <h3 className="text-lg font-semibold text-foreground mb-3">{section.title}</h3>
                       )}
                       {section.content && (
-                        <p className="text-pretty leading-relaxed text-muted-foreground">{section.content}</p>
+                        <RichText text={section.content} />
                       )}
                       {section.image && (
                         <div className="mt-4 overflow-hidden rounded-xl border border-border">
@@ -327,7 +328,7 @@ export default async function ProjectPage({
                       <h2 className="text-2xl font-bold text-foreground mb-5">{item.title}</h2>
                     )}
                     {item.content && (
-                      <p className="text-pretty leading-relaxed text-muted-foreground">{item.content}</p>
+                      <RichText text={item.content} />
                     )}
                     {item.image && (
                       <div className="mt-6 overflow-hidden rounded-xl border border-border">
@@ -353,7 +354,7 @@ export default async function ProjectPage({
                       <h2 className="text-2xl font-bold text-foreground mb-5">{item.title}</h2>
                     )}
                     {item.description && (
-                      <p className="mb-4 text-pretty leading-relaxed text-muted-foreground">{item.description}</p>
+                      <RichText text={item.description} className="mb-4" />
                     )}
                     {item.snippet && <SqlCodeBlock code={item.snippet} />}
                     {item.image && (
