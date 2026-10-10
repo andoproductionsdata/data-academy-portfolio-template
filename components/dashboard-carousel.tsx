@@ -35,6 +35,8 @@ export function DashboardCarousel({
     setCurrent(next)
   }
 
+  if (!slides || slides.length === 0) return null
+
   return (
     <div className="mt-6 space-y-3">
       {/* Heading */}
