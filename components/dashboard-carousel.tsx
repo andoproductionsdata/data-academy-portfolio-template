@@ -4,6 +4,7 @@ import { useState } from "react"
 import Image from "next/image"
 import { motion, AnimatePresence } from "framer-motion"
 import { ChevronLeft, ChevronRight } from "lucide-react"
+import { RichText } from "@/components/rich-text"
 
 type Slide = {
   title: string
@@ -74,7 +75,7 @@ export function DashboardCarousel({
                   ? slides[current].description
                   : [slides[current].description]
                 ).map((para, i) => (
-                  <p key={i} className="text-sm text-muted-foreground leading-relaxed">{para}</p>
+                  <RichText key={i} text={para} className="text-sm" />
                 ))}
                 {slides[current].bullets && (
                   <ul className="mt-1 space-y-1">
