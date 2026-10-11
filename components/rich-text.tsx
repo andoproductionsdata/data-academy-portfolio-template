@@ -16,7 +16,7 @@ function parse(text: string): Block[] {
 
   for (const line of lines) {
     const trimmed = line.trim()
-    if (trimmed.startsWith("- ") || trimmed === "-") {
+    if (/^-\s*\S/.test(trimmed) || trimmed === "-") {
       currentBullets.push(trimmed.replace(/^-\s*/, ""))
     } else {
       flushBullets()
